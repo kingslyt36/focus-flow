@@ -1,0 +1,16 @@
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  age: Int
+  gender: Gender
+  password: String!
+  accessToken: String!
+  refreshToken: String!
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
