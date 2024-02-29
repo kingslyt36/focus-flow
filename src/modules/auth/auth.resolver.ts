@@ -2,9 +2,10 @@ import { Args, Resolver, Mutation, Query } from '@nestjs/graphql';
 import { HttpStatus, UseGuards } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
-import { LoginResponseDto, LogoutResponseDto, RegisterInputDto, RegisterResponseDto } from './dto';
+import { LoginResponseDto, RegisterInputDto, RegisterResponseDto } from './dto';
 import { JwtAuthGuard } from './guards';
-import { CurrentUser } from 'src/utils/decorators/user-payload.decorator';
+import { CurrentUser } from '../../utils/decorators/user-payload.decorator';
+import { ResponseMessage } from '../../utils/const/messages/response-message';
 
 @Resolver('Auth')
 export class AuthResolver {
@@ -36,7 +37,7 @@ export class AuthResolver {
 
   @Mutation('logout')
   @UseGuards(JwtAuthGuard)
-  async logout(@CurrentUser() user: any): Promise<LogoutResponseDto> {
+  async logout(@CurrentUser() user: any): Promise<ResponseMessage> {
     await this._authService.logout(user.sub);
     return {
       status: HttpStatus.OK,

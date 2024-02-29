@@ -1,0 +1,4 @@
+# Query and Mutation
+type Mutation {
+  changePassword(changePasswordInput: ChangePasswordInput!): ChangePasswordResponse!
+}

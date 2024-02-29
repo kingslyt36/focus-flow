@@ -1,0 +1,28 @@
+# User type
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  age: Int
+  gender: Gender
+  password: String!
+  accessToken: String!
+  refreshToken: String!
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+# Change Password related
+input ChangePasswordInput {
+  oldPassword: String!
+  newPassword: String!
+}
+
+type ChangePasswordResponse {
+  status: Int!
+  message: String!
+}

@@ -1,0 +1,43 @@
+scalar DateTime
+
+# Data payload
+type AuthPayload {
+  user: UserPayload!
+}
+
+type UserPayload {
+  id: ID!
+  username: String!
+  email: String!
+}
+
+# Register related
+input RegisterInput {
+  username: String!
+  email: String!
+  password: String!
+}
+
+type RegisterResponse {
+  status: Int!
+  message: String!
+  data: AuthPayload!
+}
+
+# Login related
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type LoginResponse {
+  status: Int!
+  message: String!
+  data: AuthPayload!
+}
+
+# Logout related
+type LogoutResponse {
+  status: Int!
+  message: String!
+}

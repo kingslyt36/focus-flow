@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class LogoutResponseDto {
+export class ResponseMessage {
   @IsNumber()
   @IsNotEmpty()
   status: number;

@@ -25,6 +25,25 @@ export class LoginInput {
     password: string;
 }
 
+export class ChangePasswordInput {
+    oldPassword: string;
+    newPassword: string;
+}
+
+export abstract class IQuery {
+    abstract sayHello(): string | Promise<string>;
+}
+
+export abstract class IMutation {
+    abstract register(registerInput: RegisterInput): RegisterResponse | Promise<RegisterResponse>;
+
+    abstract login(loginInput: LoginInput): LoginResponse | Promise<LoginResponse>;
+
+    abstract logout(): LogoutResponse | Promise<LogoutResponse>;
+
+    abstract changePassword(changePasswordInput: ChangePasswordInput): ChangePasswordResponse | Promise<ChangePasswordResponse>;
+}
+
 export class AuthPayload {
     user: UserPayload;
 }
@@ -52,18 +71,6 @@ export class LogoutResponse {
     message: string;
 }
 
-export abstract class IQuery {
-    abstract sayHello(): string | Promise<string>;
-}
-
-export abstract class IMutation {
-    abstract register(registerInput: RegisterInput): RegisterResponse | Promise<RegisterResponse>;
-
-    abstract login(loginInput: LoginInput): LoginResponse | Promise<LoginResponse>;
-
-    abstract logout(): LogoutResponse | Promise<LogoutResponse>;
-}
-
 export class User {
     id: string;
     username: string;
@@ -73,6 +80,11 @@ export class User {
     password: string;
     accessToken: string;
     refreshToken: string;
+}
+
+export class ChangePasswordResponse {
+    status: number;
+    message: string;
 }
 
 export type DateTime = any;

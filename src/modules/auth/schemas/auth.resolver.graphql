@@ -1,0 +1,10 @@
+# Query and Mutation
+type Query {
+  sayHello: String!
+}
+
+type Mutation {
+  register(registerInput: RegisterInput!): RegisterResponse!
+  login(loginInput: LoginInput!): LoginResponse!
+  logout: LogoutResponse!
+}
