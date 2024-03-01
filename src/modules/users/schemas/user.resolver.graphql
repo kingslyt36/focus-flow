@@ -1,4 +1,8 @@
 # Query and Mutation
+type Query {
+  findOneUserByEmail(email: String!): User
+}
+
 type Mutation {
   changePassword(changePasswordInput: ChangePasswordInput!): ChangePasswordResponse!
 }

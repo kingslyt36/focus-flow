@@ -32,6 +32,8 @@ export class ChangePasswordInput {
 
 export abstract class IQuery {
     abstract sayHello(): string | Promise<string>;
+
+    abstract findOneUserByEmail(email: string): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export abstract class IMutation {
