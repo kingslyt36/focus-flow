@@ -6,7 +6,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { compareHashed } from '../../utils/helpers';
 import { UsersService } from '../users/users.service';
 import { DatabaseService } from '../database/database.service';
-import { AuthPayloadDto, LoginInputDto, RegisterInputDto, UserPayloadDto } from './dto';
+import { AuthPayloadDto, LoginInputDto, RefreshTokenInputDto, RegisterInputDto, UserPayloadDto } from './dto';
 import { CustomErrorMessage } from '../../utils/const/errors/error-message';
 
 @Injectable()
@@ -57,6 +57,8 @@ export class AuthService {
       // Return the user payload with access token
       return { user };
     } catch (error) {
+      console.log(error);
+
       // TODO: Specify which field is already taken
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -65,6 +67,32 @@ export class AuthService {
       }
 
       throw new HttpException('Registration failed', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async refreshToken(refreshTokenInput: RefreshTokenInputDto): Promise<void> {
+    try {
+      const user = await this.userService.findOneUserById(refreshTokenInput.userId);
+      if (!user) {
+        throw new HttpException(CustomErrorMessage.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+      }
+
+      const validRefreshToken = await compareHashed(refreshTokenInput.refreshToken, user.refreshToken);
+      if (!validRefreshToken) {
+        throw new HttpException(CustomErrorMessage.REFRESH_TOKEN_MISS_MATCH, HttpStatus.BAD_REQUEST);
+      }
+
+      const newAccessToken = await this.generateRefreshToken(user);
+      await this.db.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          accessToken: newAccessToken,
+        },
+      });
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -108,6 +136,19 @@ export class AuthService {
     ]);
 
     return [accessToken, refreshToken];
+  }
+
+  private async generateRefreshToken(userPayload: UserPayloadDto) {
+    return await this.jwtService.signAsync(
+      {
+        sub: userPayload.id,
+        email: userPayload.email,
+      },
+      {
+        secret: this.config.get('JWT_SECRET'),
+        expiresIn: '1d',
+      },
+    );
   }
 
   private async updateRefreshTokenHash(userId: string, accessToken: string, refreshToken: string) {

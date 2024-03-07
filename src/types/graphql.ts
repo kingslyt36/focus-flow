@@ -25,6 +25,11 @@ export class LoginInput {
     password: string;
 }
 
+export class RefreshTokenInput {
+    userId: string;
+    refreshToken: string;
+}
+
 export class ChangePasswordInput {
     oldPassword: string;
     newPassword: string;
@@ -41,7 +46,9 @@ export abstract class IMutation {
 
     abstract login(loginInput: LoginInput): LoginResponse | Promise<LoginResponse>;
 
-    abstract logout(): LogoutResponse | Promise<LogoutResponse>;
+    abstract refreshToken(refreshTokenInput: RefreshTokenInput): AuthResponse | Promise<AuthResponse>;
+
+    abstract logout(): AuthResponse | Promise<AuthResponse>;
 
     abstract changePassword(changePasswordInput: ChangePasswordInput): ChangePasswordResponse | Promise<ChangePasswordResponse>;
 }
@@ -68,7 +75,7 @@ export class LoginResponse {
     data: AuthPayload;
 }
 
-export class LogoutResponse {
+export class AuthResponse {
     status: number;
     message: string;
 }

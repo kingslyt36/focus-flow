@@ -6,5 +6,6 @@ type Query {
 type Mutation {
   register(registerInput: RegisterInput!): RegisterResponse!
   login(loginInput: LoginInput!): LoginResponse!
-  logout: LogoutResponse!
+  refreshToken(refreshTokenInput: RefreshTokenInput!): AuthResponse!
+  logout: AuthResponse!
 }

@@ -3,7 +3,7 @@ import { HttpStatus, UseGuards } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { LoginResponseDto, RegisterInputDto, RegisterResponseDto } from './dto';
-import { JwtAuthGuard } from './guards';
+import { JwtAuthGuard, JwtRefreshAuthGuard } from './guards';
 import { CurrentUser } from '../../utils/decorators/user-payload.decorator';
 import { ResponseMessage } from '../../utils/const/messages/response-message';
 
@@ -48,5 +48,15 @@ export class AuthResolver {
   @Query('sayHello')
   async sayHello(): Promise<string> {
     return 'Hello World';
+  }
+
+  @Mutation('refreshToken')
+  @UseGuards(JwtRefreshAuthGuard)
+  async refreshToken(@CurrentUser() user: any): Promise<ResponseMessage> {
+    await this._authService.refreshToken(user);
+    return {
+      status: HttpStatus.OK,
+      message: 'Refresh token successfully',
+    };
   }
 }

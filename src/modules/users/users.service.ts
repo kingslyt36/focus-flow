@@ -65,6 +65,18 @@ export class UsersService {
     }
   }
 
+  async findOneUserById(id: string): Promise<User> {
+    try {
+      const user = await this.db.user.findUnique({
+        where: { id },
+      });
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async findOneUserByEmail(email: string): Promise<User> {
     try {
       const user = await this.db.user.findUnique({

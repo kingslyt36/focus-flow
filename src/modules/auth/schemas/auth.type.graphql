@@ -36,8 +36,14 @@ type LoginResponse {
   data: AuthPayload!
 }
 
-# Logout related
-type LogoutResponse {
+# Refresh Token related
+input RefreshTokenInput {
+  userId: String!
+  refreshToken: String!
+}
+
+# Other
+type AuthResponse {
   status: Int!
   message: String!
 }
